@@ -15,10 +15,11 @@ class Database {
 
     for (let i = 0; i < metricLength; i++) {
       let current = logFile.metrics[i];
-      if (current.valid && pastHour.isBefore(current.time)) {
+      if (current && pastHour.isBefore(current.time)) {
         metricSum += current.value;
+      } else {
+        logFile.metrics.splice(i, 1);
       }
-      current.valid = false;
     }
     return metricSum;
   }
@@ -49,7 +50,7 @@ class Database {
   }
 
   newLog(value) {
-    return { time: new Date(), value, valid: true };
+    return { time: new Date(), value };
   }
 
   removeLog(log) {
