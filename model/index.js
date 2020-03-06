@@ -5,6 +5,7 @@ class Database {
   constructor() {
       this._files = [];
   }
+  
   calcMetricSum(key) {
     const logFile = this.findLog(key);
     let metricSum = 0;
@@ -21,10 +22,12 @@ class Database {
     }
     return metricSum;
   }
+
   findLog(key) {
     const log = this._files.find(file => file.key === key);
     return log;
   }
+
   createLog({key, value}) {
     const nValue = Number(value);
     const log = this.findLog(key);
@@ -36,11 +39,21 @@ class Database {
     log.metrics.push(this.newLog(nValue))
     return true;
   }
+  
+  metricCount() {
+    return this._files.length;
+  }
+
+  clearDb() {
+    return this._files.length = 0;
+  }
+
   newLog(value) {
     return { time: new Date(), value, valid: true };
   }
+
   removeLog(log) {
-    const logFile = this._files.find(x => x.id === log.id);
+    const logFile = this._files.find(x => x.key === log.key);
     if (!logFile) throw new Error('Log does not exist');
     const index = this._files[logFile];
     this._files.splice(index, 1)
